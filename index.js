@@ -49,29 +49,39 @@ server.get('/projects/:index', (req, res) => {
     return res.json(project.title);
 })
 
-//change a single project Id
-server.put('/projects/:index', (req, res) => {
-    const project = projects[req.params.index];
-    const {id} = req.body;
+//change a single project Id and Title
+server.put('/projects/:index', checkProjectExists, (req, res) => {
+    const {id} = req.params;
+    const {title} = req.body;
 
-    project.id = id;
+    const project = projects.find(p => p.id == id);
 
-    return res.json(projects);
+    project.title = title;
+
+    return res.json(project);
 })
 
 //Add a project
 server.post('/projects/', (req, res) => {
     const {id, title} = req.body;
 
-    projects.push({"id": id, "title": title, "tasks": []});
+    const project ={
+        id,
+        title,
+        tasks: []
+    };
+
+    projects.push(project);
 
     return res.json(projects);
 })
 
 //Add a task into an existing project
-server.post('/projects/:index', (req, res) => {
-    const project = projects[req.params.index];
+server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
+    const {id} = req.params;
     const {task} = req.body;
+
+    const project = projects.find(p => p.id == id);
 
     project.tasks.push(task);
 
@@ -79,12 +89,14 @@ server.post('/projects/:index', (req, res) => {
 })
 
 //delete a single project by id
-server.delete('/projects/:id', (req, res) => {
-    const {index} = req.params;
+server.delete('/projects/:id', checkProjectExists, (req, res) => {
+    const {id} = req.params;
 
-    projects.splice(index, 1) ;
+    const projectIndex = projects.findIndex(p => p.id == id);
 
-    return res.json(projects);
+    projects.splice(projectIndex, 1) ;
+
+    return res.send("Usuário deletado");
 })
 
 server.listen(3000);
