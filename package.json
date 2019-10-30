@@ -1,0 +1,16 @@
+{
+  "name": "Desafio01_ConceitosNodeJS",
+  "version": "1.0.0",
+  "description": "Project Manager",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4"
+  }
+}
